@@ -20,21 +20,43 @@ public Plugin myinfo =
 	url = "github.com/Bara20"
 };
 
-public void OnMapStart()
+public void OnPluginStart()
 {
-	CreateTimer(60.0, Timer_NewUpdate, TIMER_REPEAT | TIMER_FLAG_NO_MAPCHANGE);
+	HookEvent("player_spawn", PlayerEvent);
+	HookEvent("player_death", PlayerEvent);
+	
+	HookEvent("round_start", RoundEvent);
+	HookEvent("round_end", RoundEvent);
 }
 
-public Action Timer_NewUpdate(Handle timer)
+public Action PlayerEvent(Event event, const char[] name, bool dontBroadcast)
 {
-	PrintMessage();
+	int client = GetClientOfUserId(event.GetInt("userid"));
+	
+	if(client > 0 && IsClientInGame(client) && !IsFakeClient(client))
+	{
+		PrintMessage(client);
+	}
 }
 
-void PrintMessage()
+public Action RoundEvent(Event event, const char[] name, bool dontBroadcast)
 {
-	CPrintToChatAll(OLDER_TEXT);
-	CPrintToChatAll(UPDATE_TEXT, CUR_VERSION, NEW_VERSION);
-	CPrintToChatAll(CLIENT_UPDATE);
-	CPrintToChatAll(DOWNLOAD_TEXT);
-	CPrintToChatAll(DOWNLOAD_URL);
+	for (int i = 1; i <= MaxClients; i++)
+	{
+		if(IsClientInGame(i) && !IsFakeClient(i))
+		{
+			PrintMessage(i);
+		}
+	}
+}
+
+void PrintMessage(int client)
+{
+	CPrintToChat(client, OLDER_TEXT);
+	CPrintToChat(client, UPDATE_TEXT, CUR_VERSION, NEW_VERSION);
+	CPrintToChat(client, CLIENT_UPDATE);
+	CPrintToChat(client, DOWNLOAD_TEXT);
+	CPrintToChat(client, DOWNLOAD_URL);
+	
+	LogMessage("Print message to \"%L\"", client);
 }
