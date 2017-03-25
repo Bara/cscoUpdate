@@ -18,7 +18,7 @@ public Plugin myinfo =
 
 public void OnPluginStart()
 {
-	g_cName = CreateConVar("csco_game_description", "Counter-Strike: Classic Offensive", "Sets the game description (Default: Counter-Strike: Classic Offensive)");
+	g_cName = CreateConVar("csco_game_description", "Classic Offensive", "Sets the game description (Default: Counter-Strike: Classic Offensive)");
 	g_cName.AddChangeHook(CVAR_ChangeHook);
 }
 
